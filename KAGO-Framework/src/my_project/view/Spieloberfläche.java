@@ -44,4 +44,8 @@ public class Spieloberfläche {
             ebenenListe.append(new BankKunde[(int)(Math.pow(2,i))]);
         }
     }
+
+    public int getBaumTiefe() {
+        return baumTiefe;
+    }
 }
