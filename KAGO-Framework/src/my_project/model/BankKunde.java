@@ -1,6 +1,8 @@
 package my_project.model;
 
-public class BankKunde {
+import KAGO_framework.model.abitur.datenstrukturen.ComparableContent;
+
+public class BankKunde implements ComparableContent<BankKunde> {
 
     private String name;
     private String nachname;
@@ -58,5 +60,32 @@ public class BankKunde {
 
     public int getKontonummer() {
         return kontonummer;
+    }
+
+    @Override
+    public boolean isEqual(BankKunde pContent) {
+        if (this.getKontonummer() == pContent.getKontonummer()){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isGreater(BankKunde pContent) {
+        if (this.getKontonummer() > pContent.getKontonummer()){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isLess(BankKunde pContent) {
+        if (this.getKontonummer() < pContent.getKontonummer()){
+            return true;
+        }else {
+            return false;
+        }
     }
 }
