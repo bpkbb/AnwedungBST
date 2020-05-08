@@ -1,17 +1,88 @@
 package my_project.view;
 
+import KAGO_framework.model.InteractiveGraphicalObject;
 import KAGO_framework.model.abitur.datenstrukturen.BinarySearchTree;
 import KAGO_framework.model.abitur.datenstrukturen.List;
+import KAGO_framework.view.DrawTool;
+import my_project.control.GameControll;
 import my_project.model.BankKunde;
 
-public class Spieloberfläche {
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+
+public class Spieloberfläche extends InteractiveGraphicalObject {
 
     private List<BankKunde[]> ebenenListe;
     private int baumTiefe;
+    private GameControll gC;
 
+    public Spieloberfläche(GameControll gameControll){
+        gC = gameControll;
+        baumTiefe = 0;
+        ebenenListe = new List<>();
+    }
 
+    @Override
+    public void keyPressed(int key) {
+        if(key == KeyEvent.VK_SPACE){
+            gC.erstelleNeuenKunden();
+        }
+    }
 
+    @Override
+    public void keyReleased(int key) {
 
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void draw(DrawTool drawTool) {
+        ebenenListe.toFirst();
+        if(ebenenListe.getContent() != null && ebenenListe.getContent()[0] != null) {
+            drawTool.drawText(400, 200, "" + ebenenListe.getContent()[0].getKontonummer());
+            System.out.println("Hello");
+        }
+
+        ebenenListe.next();
+        if(ebenenListe.getContent() != null && ebenenListe.getContent()[0] != null) drawTool.drawText(200, 250, ""+ebenenListe.getContent()[0].getKontonummer());
+        if(ebenenListe.getContent() != null && ebenenListe.getContent()[1] != null)drawTool.drawText(600, 250, ""+ebenenListe.getContent()[1].getKontonummer());
+
+        ebenenListe.next();
+        if(ebenenListe.getContent() != null && ebenenListe.getContent()[0] != null)drawTool.drawText(100, 300, ""+ebenenListe.getContent()[0].getKontonummer());
+        if(ebenenListe.getContent() != null && ebenenListe.getContent()[1] != null)drawTool.drawText(300, 300, ""+ebenenListe.getContent()[1].getKontonummer());
+        if(ebenenListe.getContent() != null && ebenenListe.getContent()[2] != null)drawTool.drawText(500, 300, ""+ebenenListe.getContent()[2].getKontonummer());
+        if(ebenenListe.getContent() != null && ebenenListe.getContent()[3] != null)drawTool.drawText(700, 300, ""+ebenenListe.getContent()[3].getKontonummer());
+
+    }
+
+    @Override
+    public void update(double dt) {
+
+    }
 
     public void aktualisiereDarstellung(BinarySearchTree<BankKunde> tree){
         ebenenListe.toFirst();
@@ -20,28 +91,46 @@ public class Spieloberfläche {
         }
         baumTiefe = 0;
         ermittleMaxTiefe(tree);
+        System.out.println("Tiefe: " + baumTiefe);
         erstelleArrays();
         ebenenListe.toFirst();
-
-        for(int i = 0; i < baumTiefe; i++){
-
+        //gibEineBaumebeneAus(tree, 0, 0, 1);
+        System.out.println("Arrayinhalt" + ebenenListe.getContent()[0].getName());
+        for(int i = 2; i <= baumTiefe; i++){
+            ebenenListe.next();
+            //gibEineBaumebeneAus(tree, 0, (int)(Math.pow(2,i-1)), i);
         }
     }
 
     private void ermittleMaxTiefe(BinarySearchTree<BankKunde> tree){
-        if(!tree.isEmpty()) return;
+        if(tree.isEmpty()) return;
         ermittleMaxTiefe(tree, 1);
     }
 
     private void ermittleMaxTiefe(BinarySearchTree<BankKunde> tree, int tiefe){
-        if(tiefe > baumTiefe) baumTiefe = tiefe;
-        ermittleMaxTiefe(tree.getLeftTree(), tiefe++);
-        ermittleMaxTiefe(tree.getRightTree(), tiefe++);
+        if(!tree.isEmpty()) {
+            System.out.println("Hallo");
+            if (tiefe > baumTiefe) baumTiefe = tiefe;
+            System.out.println(""+tree.getContent().getName());
+            ermittleMaxTiefe(tree.getLeftTree(), tiefe++);
+            ermittleMaxTiefe(tree.getRightTree(), tiefe++);
+        }
     }
 
     private void erstelleArrays(){
         for(int i = 1; i <= baumTiefe; i++){
-            ebenenListe.append(new BankKunde[(int)(Math.pow(2,i))]);
+            ebenenListe.append(new BankKunde[(int)(Math.pow(2,i--))]);
+        }
+    }
+
+    private void gibEineBaumebeneAus(BinarySearchTree<BankKunde> tree, int a, int b, int ebene){
+        if(tree == null || ebene < 0 || tree.isEmpty()) return;
+        if(ebene == 1){
+            System.out.println("Neuer Kunde:"+ tree.getContent().getName());
+            ebenenListe.getContent()[a] = tree.getContent();
+        }else{
+            gibEineBaumebeneAus(tree.getLeftTree(), a, b/2, ebene--);
+            gibEineBaumebeneAus(tree.getRightTree(), b/2, b, ebene--);
         }
     }
 

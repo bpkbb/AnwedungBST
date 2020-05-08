@@ -1,5 +1,6 @@
 package my_project.control;
 
+import KAGO_framework.control.ViewController;
 import KAGO_framework.model.abitur.datenstrukturen.BinarySearchTree;
 import my_project.model.BankKunde;
 import my_project.view.Spieloberfläche;
@@ -9,9 +10,15 @@ public class GameControll {
     private BankKunde neuerKunde;
     private BankKunde randomKunde;
     private Spieloberfläche spieloberfläche;
+    private ViewController vC;
 
-    public GameControll(){
-        spieloberfläche = new Spieloberfläche();
+    public GameControll(ViewController viewControll){
+        vC = viewControll;
+        spieloberfläche = new Spieloberfläche(this);
+        vC.draw(spieloberfläche);
+        vC.register(spieloberfläche);
+        neuerKunde = new BankKunde();
+        tree = new BinarySearchTree<>();
     }
 
 
