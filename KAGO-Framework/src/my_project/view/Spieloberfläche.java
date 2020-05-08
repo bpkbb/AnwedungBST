@@ -62,20 +62,17 @@ public class Spieloberfläche extends InteractiveGraphicalObject {
     @Override
     public void draw(DrawTool drawTool) {
         ebenenListe.toFirst();
-        if(ebenenListe.getContent() != null && ebenenListe.getContent()[0] != null) {
-            drawTool.drawText(400, 200, "" + ebenenListe.getContent()[0].getKontonummer());
-            System.out.println("Hello");
+        int tiefe = 1;
+        double x = 400;
+        while(ebenenListe.hasAccess()){
+            x = 500 / tiefe;
+            for(int i = 0; i< ebenenListe.getContent().length; i++){
+                x = x*(i+1);
+                if(ebenenListe.getContent() != null && ebenenListe.getContent()[i] != null) drawTool.drawText(x, 250+20*tiefe, ""+ebenenListe.getContent()[i].getKontonummer());
+            }
+            tiefe++;
+            ebenenListe.next();
         }
-
-        ebenenListe.next();
-        if(ebenenListe.getContent() != null && ebenenListe.getContent()[0] != null) drawTool.drawText(200, 250, ""+ebenenListe.getContent()[0].getKontonummer());
-        if(ebenenListe.getContent() != null && ebenenListe.getContent()[1] != null)drawTool.drawText(600, 250, ""+ebenenListe.getContent()[1].getKontonummer());
-
-        ebenenListe.next();
-        if(ebenenListe.getContent() != null && ebenenListe.getContent()[0] != null)drawTool.drawText(100, 300, ""+ebenenListe.getContent()[0].getKontonummer());
-        if(ebenenListe.getContent() != null && ebenenListe.getContent()[1] != null)drawTool.drawText(300, 300, ""+ebenenListe.getContent()[1].getKontonummer());
-        if(ebenenListe.getContent() != null && ebenenListe.getContent()[2] != null)drawTool.drawText(500, 300, ""+ebenenListe.getContent()[2].getKontonummer());
-        if(ebenenListe.getContent() != null && ebenenListe.getContent()[3] != null)drawTool.drawText(700, 300, ""+ebenenListe.getContent()[3].getKontonummer());
 
     }
 
@@ -94,11 +91,11 @@ public class Spieloberfläche extends InteractiveGraphicalObject {
         System.out.println("Tiefe: " + baumTiefe);
         erstelleArrays();
         ebenenListe.toFirst();
-        //gibEineBaumebeneAus(tree, 0, 0, 1);
+        gibEineBaumebeneAus(tree, 0, 0, 1);
         System.out.println("Arrayinhalt" + ebenenListe.getContent()[0].getName());
         for(int i = 2; i <= baumTiefe; i++){
             ebenenListe.next();
-            //gibEineBaumebeneAus(tree, 0, (int)(Math.pow(2,i-1)), i);
+            gibEineBaumebeneAus(tree, 0, (int)(Math.pow(2,i-1)), i);
         }
     }
 
@@ -119,7 +116,8 @@ public class Spieloberfläche extends InteractiveGraphicalObject {
 
     private void erstelleArrays(){
         for(int i = 1; i <= baumTiefe; i++){
-            ebenenListe.append(new BankKunde[(int)(Math.pow(2,i--))]);
+
+            ebenenListe.append(new BankKunde[(int)(Math.pow(2,i-1))]);
         }
     }
 
