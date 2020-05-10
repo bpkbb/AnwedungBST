@@ -62,17 +62,39 @@ public class Spieloberfläche extends InteractiveGraphicalObject {
     @Override
     public void draw(DrawTool drawTool) {
         ebenenListe.toFirst();
-        int tiefe = 1;
-        double x = 400;
+        int breite = 1000;
+        double y = 200;
+        int ebene = 0;
         while(ebenenListe.hasAccess()){
-            x = 500 / tiefe;
+            y+= 50;
+            breite = breite/2;
+            //System.out.println("ebene" + ebene);
             for(int i = 0; i< ebenenListe.getContent().length; i++){
-                x = x*(i+1);
-                if(ebenenListe.getContent() != null && ebenenListe.getContent()[i] != null) drawTool.drawText(x, 250+20*tiefe, ""+ebenenListe.getContent()[i].getKontonummer());
+                if(ebenenListe.getContent() != null && ebenenListe.getContent()[i] != null){
+                    //System.out.print(ebenenListe.getContent()[i].getKontonummer()+", ");
+                    //drawTool.drawText(breite*i+breite, y, ""+ebenenListe.getContent()[i].getKontonummer());
+                    //drawTool.drawRectangle(breite*i+breite, y, 50, 20);
+                }else{
+                   // System.out.print("null, ");
+                }
             }
-            tiefe++;
+            ebene ++;
             ebenenListe.next();
         }
+        ebenenListe.toFirst();
+        if(ebenenListe.getContent() != null && ebenenListe.getContent()[0] != null) {
+            drawTool.drawText(400, 200, "" + ebenenListe.getContent()[0].getKontonummer());
+        }
+
+        ebenenListe.next();
+        if(ebenenListe.getContent() != null && ebenenListe.getContent()[0] != null) drawTool.drawText(200, 250, ""+ebenenListe.getContent()[0].getKontonummer());
+        if(ebenenListe.getContent() != null && ebenenListe.getContent()[1] != null)drawTool.drawText(600, 250, ""+ebenenListe.getContent()[1].getKontonummer());
+
+        ebenenListe.next();
+        if(ebenenListe.getContent() != null && ebenenListe.getContent()[0] != null)drawTool.drawText(100, 300, ""+ebenenListe.getContent()[0].getKontonummer());
+        if(ebenenListe.getContent() != null && ebenenListe.getContent()[1] != null)drawTool.drawText(300, 300, ""+ebenenListe.getContent()[1].getKontonummer());
+        if(ebenenListe.getContent() != null && ebenenListe.getContent()[2] != null)drawTool.drawText(500, 300, ""+ebenenListe.getContent()[2].getKontonummer());
+        if(ebenenListe.getContent() != null && ebenenListe.getContent()[3] != null)drawTool.drawText(700, 300, ""+ebenenListe.getContent()[3].getKontonummer());
 
     }
 
@@ -88,15 +110,32 @@ public class Spieloberfläche extends InteractiveGraphicalObject {
         }
         baumTiefe = 0;
         ermittleMaxTiefe(tree);
-        System.out.println("Tiefe: " + baumTiefe);
         erstelleArrays();
         ebenenListe.toFirst();
-        gibEineBaumebeneAus(tree, 0, 0, 1);
-        System.out.println("Arrayinhalt" + ebenenListe.getContent()[0].getName());
+        gibEineBaumebeneAus(tree, 1, 0, 1);
         for(int i = 2; i <= baumTiefe; i++){
             ebenenListe.next();
-            gibEineBaumebeneAus(tree, 0, (int)(Math.pow(2,i-1)), i);
+            gibEineBaumebeneAus(tree, 1, (int)(Math.pow(2,i-1)), i);
         }
+
+        /*ebenenListe.toFirst();
+        int ebene = 0;
+        while(ebenenListe.hasAccess()){
+            y+= 50;
+            System.out.println("ebene " + ebene);
+            for(int i = 0; i< ebenenListe.getContent().length; i++){
+                if(ebenenListe.getContent() != null && ebenenListe.getContent()[i] != null){
+                    System.out.print(ebenenListe.getContent()[i].getKontonummer()+", ");
+                }else{
+                    System.out.print("null, ");
+                }
+            }
+            ebene ++;
+            System.out.println("");
+            ebenenListe.next();
+        }
+        */
+
     }
 
     private void ermittleMaxTiefe(BinarySearchTree<BankKunde> tree){
@@ -106,9 +145,7 @@ public class Spieloberfläche extends InteractiveGraphicalObject {
 
     private void ermittleMaxTiefe(BinarySearchTree<BankKunde> tree, int tiefe){
         if(!tree.isEmpty()) {
-            System.out.println("Hallo");
             if (tiefe > baumTiefe) baumTiefe = tiefe;
-            System.out.println(""+tree.getContent().getName());
             ermittleMaxTiefe(tree.getLeftTree(), tiefe++);
             ermittleMaxTiefe(tree.getRightTree(), tiefe++);
         }
@@ -124,11 +161,14 @@ public class Spieloberfläche extends InteractiveGraphicalObject {
     private void gibEineBaumebeneAus(BinarySearchTree<BankKunde> tree, int a, int b, int ebene){
         if(tree == null || ebene < 0 || tree.isEmpty()) return;
         if(ebene == 1){
-            System.out.println("Neuer Kunde:"+ tree.getContent().getName());
-            ebenenListe.getContent()[a] = tree.getContent();
+                ebenenListe.getContent()[a-1] = tree.getContent();
+
         }else{
+            System.out.println("links"+a+b/2);
+            int tmp = b/2+1;
+            System.out.println("rechts"+tmp+b);
             gibEineBaumebeneAus(tree.getLeftTree(), a, b/2, ebene--);
-            gibEineBaumebeneAus(tree.getRightTree(), b/2, b, ebene--);
+            gibEineBaumebeneAus(tree.getRightTree(), b/2+1, b, ebene--);
         }
     }
 
