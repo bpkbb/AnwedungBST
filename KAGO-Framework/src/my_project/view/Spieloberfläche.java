@@ -64,41 +64,23 @@ public class Spieloberfläche extends InteractiveGraphicalObject {
 
     @Override
     public void draw(DrawTool drawTool) {
-        ebenenListe.toFirst();
-        int breite = 1000;
         double y = 200;
-        int ebene = 0;
+        double breite = 1000;
+        ebenenListe.toFirst();
+        int i = 0;
         while(ebenenListe.hasAccess()){
-            y+= 50;
-            breite = breite/2;
-            //System.out.println("ebene" + ebene);
-            for(int i = 0; i< ebenenListe.getContent().length; i++){
-                if(ebenenListe.getContent() != null && ebenenListe.getContent()[i] != null){
-                    //System.out.print(ebenenListe.getContent()[i].getKontonummer()+", ");
-                    //drawTool.drawText(breite*i+breite, y, ""+ebenenListe.getContent()[i].getKontonummer());
-                    //drawTool.drawRectangle(breite*i+breite, y, 50, 20);
-                }else{
-                   // System.out.print("null, ");
+            for(int j = 0; j < ebenenListe.getContent().length;j++) {
+                drawTool.drawRectangle(breite * j, y + 50 * i, breite, 50);
+                if(ebenenListe.getContent() != null && ebenenListe.getContent()[j] != null){
+                    drawTool.drawText(breite*j+breite/2, y+50*i+20, ""+ebenenListe.getContent()[j].getName());
+                    drawTool.drawText(breite*j+breite/2, y+50*i+30, ""+ebenenListe.getContent()[j].getNachname());
+                    drawTool.drawText(breite*j+breite/2, y+50*i+10, ""+ebenenListe.getContent()[j].getKontonummer());
                 }
             }
-            ebene ++;
+            breite = breite/2;
+            i++;
             ebenenListe.next();
         }
-        ebenenListe.toFirst();
-        if(ebenenListe.getContent() != null && ebenenListe.getContent()[0] != null) {
-            drawTool.drawText(400, 200, "" + ebenenListe.getContent()[0].getKontonummer());
-        }
-
-        ebenenListe.next();
-        if(ebenenListe.getContent() != null && ebenenListe.getContent()[0] != null) drawTool.drawText(200, 250, ""+ebenenListe.getContent()[0].getKontonummer());
-        if(ebenenListe.getContent() != null && ebenenListe.getContent()[1] != null)drawTool.drawText(600, 250, ""+ebenenListe.getContent()[1].getKontonummer());
-
-        ebenenListe.next();
-        if(ebenenListe.getContent() != null && ebenenListe.getContent()[0] != null)drawTool.drawText(100, 300, ""+ebenenListe.getContent()[0].getKontonummer());
-        if(ebenenListe.getContent() != null && ebenenListe.getContent()[1] != null)drawTool.drawText(300, 300, ""+ebenenListe.getContent()[1].getKontonummer());
-        if(ebenenListe.getContent() != null && ebenenListe.getContent()[2] != null)drawTool.drawText(500, 300, ""+ebenenListe.getContent()[2].getKontonummer());
-        if(ebenenListe.getContent() != null && ebenenListe.getContent()[3] != null)drawTool.drawText(700, 300, ""+ebenenListe.getContent()[3].getKontonummer());
-
         oberenLeisten(drawTool);
     }
 
@@ -122,10 +104,9 @@ public class Spieloberfläche extends InteractiveGraphicalObject {
             gibEineBaumebeneAus(tree, 1, (int)(Math.pow(2,i-1)), i);
         }
 
-        /*ebenenListe.toFirst();
+       /* ebenenListe.toFirst();
         int ebene = 0;
         while(ebenenListe.hasAccess()){
-            y+= 50;
             System.out.println("ebene " + ebene);
             for(int i = 0; i< ebenenListe.getContent().length; i++){
                 if(ebenenListe.getContent() != null && ebenenListe.getContent()[i] != null){
@@ -137,10 +118,11 @@ public class Spieloberfläche extends InteractiveGraphicalObject {
             ebene ++;
             System.out.println("");
             ebenenListe.next();
-        }
-        */
-
     }
+    */
+
+
+}
 
     private void ermittleMaxTiefe(BinarySearchTree<BankKunde> tree){
         if(tree.isEmpty()) return;
@@ -168,9 +150,6 @@ public class Spieloberfläche extends InteractiveGraphicalObject {
                 ebenenListe.getContent()[a-1] = tree.getContent();
 
         }else{
-            System.out.println("links"+a+b/2);
-            int tmp = b/2+1;
-            System.out.println("rechts"+tmp+b);
             gibEineBaumebeneAus(tree.getLeftTree(), a, (a+b)/2, ebene-1);
             gibEineBaumebeneAus(tree.getRightTree(), (a+b)/2+1, b, ebene-1);
         }
