@@ -27,6 +27,9 @@ public class Spieloberfläche extends InteractiveGraphicalObject {
         if(key == KeyEvent.VK_SPACE){
             gC.erstelleNeuenKunden();
         }
+        if(key == KeyEvent.VK_ENTER){
+            gC.entferneEs();
+        }
     }
 
     @Override
@@ -96,6 +99,7 @@ public class Spieloberfläche extends InteractiveGraphicalObject {
         if(ebenenListe.getContent() != null && ebenenListe.getContent()[2] != null)drawTool.drawText(500, 300, ""+ebenenListe.getContent()[2].getKontonummer());
         if(ebenenListe.getContent() != null && ebenenListe.getContent()[3] != null)drawTool.drawText(700, 300, ""+ebenenListe.getContent()[3].getKontonummer());
 
+        oberenLeisten(drawTool);
     }
 
     @Override
@@ -169,6 +173,14 @@ public class Spieloberfläche extends InteractiveGraphicalObject {
             System.out.println("rechts"+tmp+b);
             gibEineBaumebeneAus(tree.getLeftTree(), a, (a+b)/2, ebene-1);
             gibEineBaumebeneAus(tree.getRightTree(), (a+b)/2+1, b, ebene-1);
+        }
+    }
+
+    public void oberenLeisten(DrawTool drawTool) {
+        drawTool.drawText(100, 100, gC.getNeuerKunde().getName() + " " + gC.getNeuerKunde().getNachname());
+        drawTool.drawText(100, 120, "KN: " + gC.getNeuerKunde().getKontonummer());
+        if (!gC.getTree().isEmpty() && gC.getRandomKunde() != null) {
+            drawTool.drawText(700, 100, "Random Kunde: " + gC.getRandomKunde().getName() + " " + gC.getRandomKunde().getNachname() + " " + gC.getRandomKunde().getKontonummer());
         }
     }
 

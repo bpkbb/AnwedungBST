@@ -26,34 +26,49 @@ public class GameControll {
     public void erstelleNeuenKunden(){
         tree.insert(neuerKunde);
         neuerKunde = new BankKunde();
+        ueberpruefeKN(neuerKunde);
         spieloberfläche.aktualisiereDarstellung(tree);
+        waehleRandomKunde(tree);
     }
 
-    public BankKunde waehleRandomKunden(){
+    public void waehleRandomKunde(BinarySearchTree<BankKunde> tree){
         if (!tree.isEmpty()){
-            int randomTiefe = (int) Math.random() * spieloberfläche.getBaumTiefe();
             BinarySearchTree<BankKunde> tmp = tree;
-            randomKunde = tree.getContent();
-            while (randomTiefe != 0){
-                if (Math.random() > 0.5){
-                    if (tmp.getLeftTree().isEmpty()){
-                        return randomKunde;
-                    }else {
-                        tmp = tmp.getLeftTree();
-                        randomKunde = tmp.getLeftTree().getContent();
+            randomKunde = tmp.getContent();
+            if (Math.random()>0.3){
+                if(Math.random()>0.5){
+                    if (!tree.getLeftTree().isEmpty()){
+                        tmp = tree.getLeftTree();
+                        randomKunde = tmp.getContent();
+                        waehleRandomKunde(tmp);
+                    }else{
+                        return;
                     }
                 }else{
-                    if (tmp.getRightTree().isEmpty()){
-                        return randomKunde;
-                    }else {
-                        tmp = tmp.getRightTree();
-                        randomKunde = tmp.getRightTree().getContent();
+                    if (!tree.getRightTree().isEmpty()){
+                        tmp = tree.getRightTree();
+                        randomKunde = tmp.getContent();
+                        waehleRandomKunde(tmp);
+                    }else{
+                        return;
                     }
                 }
-                randomTiefe--;
             }
         }
-        return randomKunde;
+    }
+
+    public void ueberpruefeKN(BankKunde bK){
+        while (tree.search(bK) != null){
+            bK.setzeKontonummer();
+        }
+    }
+
+    public void entferneEs(){
+        if (!tree.isEmpty()) {
+            tree.remove(randomKunde);
+            waehleRandomKunde(tree);
+            spieloberfläche.aktualisiereDarstellung(tree);
+        }
     }
 
     public BankKunde getNeuerKunde() {
@@ -62,5 +77,9 @@ public class GameControll {
 
     public BankKunde getRandomKunde() {
         return randomKunde;
+    }
+
+    public BinarySearchTree<BankKunde> getTree() {
+        return tree;
     }
 }
