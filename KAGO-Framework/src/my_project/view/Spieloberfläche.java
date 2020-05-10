@@ -167,8 +167,8 @@ public class Spieloberfläche extends InteractiveGraphicalObject {
             System.out.println("links"+a+b/2);
             int tmp = b/2+1;
             System.out.println("rechts"+tmp+b);
-            gibEineBaumebeneAus(tree.getLeftTree(), a, b/2, ebene--);
-            gibEineBaumebeneAus(tree.getRightTree(), b/2+1, b, ebene--);
+            gibEineBaumebeneAus(tree.getLeftTree(), a, (a+b)/2, ebene-1);
+            gibEineBaumebeneAus(tree.getRightTree(), (a+b)/2+1, b, ebene-1);
         }
     }
 
